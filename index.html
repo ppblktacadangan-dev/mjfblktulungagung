@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <style>
+    :root{--navy:#123b5d;--blue:#1769aa;--ink:#1f2937;--muted:#64748b;--line:#dbe3ec;--bg:#f3f6fa}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px Arial,sans-serif;color:var(--ink)}
+    .wrap{max-width:920px;margin:28px auto;padding:0 16px}.hero{background:linear-gradient(120deg,#123b5d,#1769aa);color:white;padding:28px;border-radius:16px}
+    .hero h1{margin:0 0 8px;font-size:26px}.hero p{margin:5px 0;color:#e5eef7;line-height:1.5}
+    form,.success{background:white;margin-top:18px;padding:24px;border-radius:16px;box-shadow:0 4px 18px #102a4310}
+    h2{font-size:18px;color:var(--navy);margin:8px 0 16px}.section{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}
+    label{font-weight:600;font-size:13px}input,textarea,select{font:inherit;border:1px solid #cbd5e1;border-radius:8px;padding:11px;background:white;width:100%}
+    textarea{min-height:82px;resize:vertical}.hint{font-size:12px;color:var(--muted);font-weight:normal;line-height:1.5}
+    .vacancy,.attendee{border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0;background:#fbfdff}
+    .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    button{border:0;border-radius:9px;padding:12px 17px;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+    button.secondary{background:#e8f1f8;color:var(--navy)}button.remove{background:#fff0f0;color:#b42318;padding:7px 10px}
+    .submit{width:100%;margin-top:10px;padding:15px;font-size:16px}.success{display:none;border:1px solid #86c99a;color:#166534}
+    .required{color:#b42318}.doc{background:#f8fafc;padding:14px;border:1px solid var(--line);border-radius:10px}
+    #status{margin-top:14px;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.stat{background:#fff;border-radius:12px;padding:14px;text-align:center;box-shadow:0 3px 12px #102a430d}.stat b{display:block;font-size:25px;color:var(--navy)}.stat span{font-size:12px;color:var(--muted)}.receipt{border:1px dashed #94a3b8;padding:24px;margin-top:14px;border-radius:10px;background:#fff}.receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.receipt-grid div{border:1px solid #e2e8f0;padding:10px;border-radius:8px}.receipt-grid b,.receipt-grid strong{display:block}.receipt-grid b{font-size:11px;color:#64748b;text-transform:uppercase}.receipt-grid strong{margin-top:4px}.print-sign{text-align:right;margin-top:30px}.qr-placeholder{margin:10px 0 0 auto;width:72px;height:72px;border:1px dashed #94a3b8;display:flex;align-items:center;justify-content:center;font-size:9px;text-align:center;padding:5px}.print-sign .qr-placeholder:after{content:"VALIDASI\A" attr(data-id);white-space:pre;font-size:9px}@media(max-width:650px){.receipt-grid{grid-template-columns:1fr}}.receipt h2{text-align:center}.print-only{display:none}
+    @media print{body{background:white}.wrap{margin:0;max-width:none}.hero,form,.no-print{display:none!important}.success{display:block!important;box-shadow:none;border:0}.print-only{display:block}.receipt{border:1px solid #555}}
+    @media(max-width:650px){.grid{grid-template-columns:1fr}.hero h1{font-size:22px}form{padding:17px}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:span 2}}
+
+    /* Premium visual refinement — preserves the original form and workflow */
+    :root{--navy:#102f4b;--blue:#17679b;--ink:#182635;--muted:#647789;--line:#dce5ed;--bg:#f2f6fa}
+    body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 12% 0%,#e5eff8 0,transparent 32%),var(--bg);letter-spacing:.05px}
+    .wrap{max-width:980px;margin:34px auto 56px}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(120deg,#0c2942 0%,#174d73 58%,#237aa5 100%);padding:34px 36px;border:1px solid #ffffff22;border-radius:22px;box-shadow:0 18px 42px #123b5d22}
+    .hero:after{content:"";position:absolute;width:260px;height:260px;right:-90px;top:-130px;border:1px solid #ffffff24;border-radius:50%;box-shadow:0 0 0 28px #ffffff09,0 0 0 58px #ffffff07}
+    .hero h1{font-size:clamp(24px,4vw,32px);letter-spacing:-.7px;font-weight:750}
+    .hero p{position:relative;z-index:1;color:#e6f0f7;line-height:1.65}
+    form,.success{border:1px solid #e5ebf1;border-radius:20px;padding:30px;box-shadow:0 12px 34px #183b5910}
+    h2{font-size:18px;letter-spacing:-.2px;font-weight:750}
+    .section{padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid #e8edf2}
+    .grid{gap:16px}.field{gap:8px}label{font-size:13px;color:#263c50}
+    input,textarea,select{border:1px solid #d4dee7;border-radius:10px;padding:12px 13px;color:#1b2b3a;transition:border-color .18s,box-shadow .18s,background .18s}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:#4386b1;box-shadow:0 0 0 3px #4386b11c;background:#fff}
+    input[type=file]{padding:10px;background:#fbfdff}
+    .check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:8px}.check-grid label{display:flex;gap:8px;align-items:flex-start;padding:10px;border:1px solid #d8e0e8;border-radius:10px;background:#f8fafc;font-weight:500}.check-grid input{margin-top:3px}
+    .hint{line-height:1.65;color:#708194}
+    .vacancy,.attendee,.doc{border:1px solid #e1e8ef;border-radius:13px;background:#fbfdff;padding:17px;box-shadow:0 3px 10px #173b5907}
+    .head{gap:12px}.head b{color:#173e5d}
+    button{border-radius:10px;padding:12px 18px;background:linear-gradient(135deg,#17679b,#2381b3);box-shadow:0 5px 12px #17679b20;transition:transform .18s,box-shadow .18s,filter .18s}
+    button:hover{transform:translateY(-1px);box-shadow:0 8px 18px #17679b2b;filter:brightness(1.04)}button:disabled{opacity:.6;cursor:wait;transform:none}
+    button.secondary{background:#eaf2f8;color:#174667;box-shadow:none}button.remove{background:#fff1f0;color:#b42318;box-shadow:none}
+    .submit{padding:16px;font-size:15px;letter-spacing:.35px}
+    .stats{gap:14px}.stat{border:1px solid #e2eaf1;border-radius:15px;padding:17px;box-shadow:0 7px 20px #173b5909}.stat b{font-size:28px;letter-spacing:-.7px}.stat span{display:block;margin-top:4px}
+    .doc{background:linear-gradient(180deg,#fbfdff,#f7fafc)}
+    .download-template{display:inline-flex;align-items:center;gap:9px;margin-top:12px;padding:11px 14px;border:1px solid #cbdce9;border-radius:10px;background:#edf5fa;color:#174b6d;text-decoration:none;font-size:13px;font-weight:700;transition:background .18s,border-color .18s,transform .18s}
+    .download-template:hover{background:#e2eff7;border-color:#9dbbd0;transform:translateY(-1px)}.download-icon{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:7px;background:#d7e9f5;font-size:17px;line-height:1}
+    #status{line-height:1.5}.receipt{border-radius:13px}
+    @media(max-width:650px){.wrap{margin:16px auto 32px}.hero{padding:25px 21px;border-radius:17px}form,.success{padding:20px 16px;border-radius:16px}.stats{gap:8px}.stat{padding:13px 8px}.stat b{font-size:23px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+  
+    /* Premium institutional header + tablet/mobile refinements */
+    .hero{padding:30px 34px 24px}
+    .institution-head{display:flex;align-items:center;gap:20px;padding-bottom:22px;border-bottom:1px solid #ffffff35;position:relative;z-index:1}
+    .province-emblem{width:82px;height:94px;flex:0 0 82px;background:#fff;border-radius:15px;padding:7px;display:grid;place-items:center;box-shadow:0 8px 22px #061c2c40}
+    .province-emblem img{width:100%;height:100%;object-fit:contain}
+    .institution-copy{min-width:0}
+    .eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;color:#c9dfed;margin-bottom:5px}
+    .department{font-size:clamp(12px,1.7vw,15px);font-weight:700;letter-spacing:1.2px;color:#e8f3fa}
+    .upt-name{font-size:clamp(19px,3vw,27px);font-weight:850;line-height:1.18;letter-spacing:-.55px;color:#fff;margin-top:5px;text-wrap:balance}
+    .institution-rule{height:3px;width:74px;border-radius:9px;background:linear-gradient(90deg,#e9c66b,#fff);margin:11px 0 9px}
+    .event-kicker{font-size:10px;letter-spacing:2.1px;font-weight:800;color:#c6dceb}
+    .hero-event{text-align:center;padding:23px 8px 18px;position:relative;z-index:1}
+    .event-pill{display:inline-flex;padding:7px 13px;border:1px solid #ffffff4d;border-radius:99px;background:#ffffff12;color:#f7df9b;font-size:11px;font-weight:800;letter-spacing:1.6px}
+    .hero-event h1{margin:12px 0 7px;font-size:clamp(29px,5vw,43px);line-height:1.05;letter-spacing:1px;font-weight:850}
+    .hero-subtitle{font-size:14px!important;color:#e0edf6!important;margin:0!important}
+    .welcome-marquee{display:flex;align-items:center;gap:13px;padding:11px 14px;border:1px solid #ffffff30;border-radius:12px;background:#061f34a8;position:relative;z-index:1;overflow:hidden}
+    .marquee-label{flex:0 0 auto;font-size:10px;font-weight:900;letter-spacing:1.2px;color:#f5d98f}
+    .marquee-window{min-width:0;overflow:hidden;white-space:nowrap}
+    .marquee-track{display:flex;width:max-content;animation:welcome-scroll 34s linear infinite}
+    .marquee-track span{padding-right:72px;color:#f3f7fb;font-size:12px;font-weight:600;letter-spacing:.1px}
+    .welcome-marquee:hover .marquee-track{animation-play-state:paused}
+    @keyframes welcome-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .hero-instruction{font-size:12px!important;color:#d5e4ef!important;margin:15px 0 0!important;position:relative;z-index:1}
+    @media(min-width:900px){.hero{padding:34px 42px 26px}.institution-head{gap:24px}.province-emblem{width:92px;height:104px;flex-basis:92px}}
+    @media(max-width:700px){.wrap{width:100%;padding-left:13px;padding-right:13px}.hero{padding:22px 18px 19px}.institution-head{gap:13px;padding-bottom:17px}.province-emblem{width:64px;height:76px;flex-basis:64px;border-radius:11px;padding:5px}.eyebrow{font-size:9px;letter-spacing:1.25px}.department{font-size:10px;letter-spacing:.55px}.upt-name{font-size:clamp(17px,4.4vw,22px);letter-spacing:-.35px}.event-kicker{font-size:9px;letter-spacing:1.2px}.hero-event{padding:20px 2px 16px}.hero-event h1{font-size:clamp(27px,7vw,36px)}.hero-subtitle{font-size:12px!important;line-height:1.5!important}.welcome-marquee{gap:9px;padding:10px}.marquee-label{font-size:9px}.marquee-track span{font-size:11px}.hero-instruction{font-size:11px!important;line-height:1.55!important}}
+    @media(max-width:390px){.institution-head{align-items:flex-start}.province-emblem{width:55px;height:66px;flex-basis:55px}.department{font-size:9px}.upt-name{font-size:16px}.welcome-marquee{align-items:flex-start;flex-direction:column;gap:6px}}
+    @media(prefers-reduced-motion:reduce){.marquee-track{animation:none!important}.welcome-marquee{white-space:normal}.marquee-window{white-space:normal}}
+
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="institution-head">
+      <div class="province-emblem">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhCvLvtn6qlzNn98i-nrYq1yBVYvG18G4CtKxTpT8rKH5leVkNzaoYfGk-yZitAfY2DwAbWCQGUWU05eH8eoYg8mugByi3BQvu8WNsOn6Sfvuy9pxVkb54XqnpFmESDTBg2sfAZK186LCtRL-cHGzJQxKpRlC1I7pKdxTj02Ud9lgJ_vo_3KXcHc2AzJQ=w285-h400-rw"
+             alt="Lambang Provinsi Jawa Timur" loading="eager" referrerpolicy="no-referrer">
+      </div>
+      <div class="institution-copy">
+        <div class="eyebrow">PEMERINTAH PROVINSI JAWA TIMUR</div>
+        <div class="department">DINAS TENAGA KERJA DAN TRANSMIGRASI</div>
+        <div class="upt-name">UPT BALAI LATIHAN KERJA TULUNGAGUNG</div>
+        <div class="institution-rule"></div>
+        <div class="event-kicker">PORTAL PENDAFTARAN PERUSAHAAN</div>
+      </div>
+    </div>
+    <div class="hero-event">
+      <span class="event-pill">24 NOVEMBER 2026</span>
+      <h1>MINI JOB FAIR 2026</h1>
+      <p class="hero-subtitle">Membangun peluang kerja, mempertemukan talenta dan dunia usaha.</p>
+    </div>
+    <div class="welcome-marquee" role="region" aria-label="Informasi sambutan">
+      <span class="marquee-label">SELAMAT DATANG</span>
+      <div class="marquee-window"><div class="marquee-track">
+        <span>Selamat datang kepada seluruh perusahaan yang mendaftarkan diri untuk mengikuti Mini Job Fair pada 24 November 2026. Terima kasih atas partisipasi dan kolaborasi Anda.</span>
+        <span aria-hidden="true">Selamat datang kepada seluruh perusahaan yang mendaftarkan diri untuk mengikuti Mini Job Fair pada 24 November 2026. Terima kasih atas partisipasi dan kolaborasi Anda.</span>
+      </div></div>
+    </div>
+    <p class="hero-instruction">Silakan lengkapi identitas perusahaan, data perwakilan, informasi lowongan pekerjaan, serta dokumen persyaratan dengan benar.</p>
+  </header>
+  <div class="stats" aria-live="polite"><div class="stat"><b id="companyCount">-</b><span>Perusahaan terdaftar</span></div><div class="stat"><b id="positionCount">-</b><span>Posisi pekerjaan</span></div><div class="stat"><b id="workerCount">-</b><span>Total kebutuhan tenaga kerja</span></div></div>
+
+  <div id="success" class="success">
+    <h2>🎉 Pendaftaran berhasil</h2><p>Data perusahaan telah tercatat. Silakan cetak dan simpan bukti pendaftaran berikut.</p>
+    <div class="receipt" id="receipt"><div style="text-align:center"><div style="font-size:12px;font-weight:bold;letter-spacing:.4px">DINAS TENAGA KERJA DAN TRANSMIGRASI PROVINSI JAWA TIMUR</div><div style="font-size:17px;font-weight:800;margin-top:4px">UPT BALAI LATIHAN KERJA TULUNGAGUNG</div><div style="font-size:22px;font-weight:900;margin-top:16px">BUKTI PENDAFTARAN</div><div style="font-weight:700;margin-top:4px">MINI JOB FAIR TAHUN 2026</div><div style="margin-top:3px">24 NOVEMBER 2026</div></div><hr><div class="receipt-grid"><div><b>Nomor Pendaftaran</b><strong id="registrationId"></strong></div><div><b>Tanggal Pendaftaran</b><strong id="registrationDate"></strong></div><div><b>Nama Perusahaan</b><strong id="receiptCompany"></strong></div><div><b>Nama PIC</b><strong id="receiptPic"></strong></div><div><b>Status Keikutsertaan</b><strong id="receiptStatus"></strong></div><div><b>Jumlah Jabatan</b><strong id="receiptPositions"></strong></div><div><b>Total Kebutuhan</b><strong id="receiptWorkers"></strong></div></div><p id="summary" style="margin-top:18px">Bukti ini menyatakan bahwa perusahaan telah melakukan pendaftaran untuk mengikuti Mini Job Fair UPT BLK Tulungagung Tahun 2026.</p><div class="print-sign"><div>Panitia Mini Job Fair 2026</div><div class="qr-placeholder" id="qrText"></div></div></div><div class="actions no-print"><button type="button" onclick="window.print()">🖨️ Cetak / Simpan PDF</button><button type="button" class="secondary" onclick="document.getElementById('success').style.display='none'">Tutup</button></div>
+  </div>
+
+  <form id="registrationForm">
+    <div class="section">
+      <h2>A. Identitas Perusahaan</h2>
+      <div class="grid">
+        <div class="field"><label>Nama perusahaan <span class="required">*</span></label><input name="companyName" required></div>
+        <div class="field"><label>Nama PIC / penanggung jawab <span class="required">*</span></label><input name="picName" required></div>
+        <div class="field"><label>Jabatan PIC</label><input name="picPosition"></div>
+        <div class="field"><label>Nomor WhatsApp <span class="required">*</span></label><input name="phone" required placeholder="08xxxxxxxxxx"></div>
+        <div class="field"><label>Email perusahaan</label><input name="email" type="email"></div>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Alamat perusahaan <span class="required">*</span></label><textarea name="address" required></textarea></div>
+      <div class="field" style="margin-top:14px"><label>Logo perusahaan (opsional, PNG/JPG maks. 2 MB)</label><input id="logo" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg"></div>
+    </div>
+
+    <div class="section">
+      <h2>B. Data Perwakilan Perusahaan yang Hadir</h2>
+      <p class="hint">Isi maksimal dua nama perwakilan perusahaan yang ditugaskan untuk hadir beserta jabatannya.</p>
+      <div id="attendees">
+        <div class="attendee">
+          <div class="head"><b>Perwakilan 1</b></div>
+          <div class="grid"><div class="field"><label>Nama lengkap <span class="required">*</span></label><input class="attendee-name" required></div>
+          <div class="field"><label>Jabatan</label><input class="attendee-position"></div></div>
+        </div>
+        <div class="attendee">
+          <div class="head"><b>Perwakilan 2</b></div>
+          <div class="grid"><div class="field"><label>Nama lengkap <span class="required">*</span></label><input class="attendee-name" required></div>
+          <div class="field"><label>Jabatan</label><input class="attendee-position"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>C. Status Keikutsertaan</h2>
+      <div class="field"><label>Pilih status keikutsertaan <span class="required">*</span></label>
+        <select name="participation" required><option value="">-- Pilih --</option>
+          <option>Perusahaan peserta Job Fair</option><option>Sponsor kegiatan</option>
+          <option>Peserta Job Fair sekaligus sponsor</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Bentuk dukungan / sponsorship (jika ada)</label><textarea name="sponsorship" placeholder="Misalnya dukungan dana, produk, perlengkapan, atau bentuk lainnya."></textarea></div>
+      <div class="field" style="margin-top:14px"><label>Nominal / estimasi kontribusi (opsional)</label><input name="contribution" placeholder="Contoh: Rp1.000.000 atau dukungan barang"></div>
+    </div>
+
+    <div class="section">
+      <h2>D. Informasi Lowongan Pekerjaan</h2>
+      <p class="hint">Tambahkan setiap jabatan/posisi secara terpisah. Isi kode KBJI apabila sudah diketahui.</p>
+      <div id="vacancies"></div>
+      <button type="button" class="secondary" onclick="addVacancy()">+ Tambah jabatan/posisi</button>
+      <div class="field" style="margin-top:14px"><label>Kebutuhan khusus lainnya</label><textarea name="specialNeeds" placeholder="Contoh: kebutuhan disabilitas, sistem shift, lokasi penempatan, atau informasi lainnya."></textarea></div>
+    </div>
+
+    <div class="section">
+      <h2>E. Pelaksanaan Test, Wawancara, dan Seleksi Pencaker</h2>
+      <div class="field"><label>1. Apakah perusahaan memerlukan ruang tambahan untuk test/wawancara langsung pada saat Mini Job Fair? <span class="required">*</span></label>
+        <select name="interviewRoomNeeded" required>
+          <option value="">-- Pilih --</option>
+          <option>Ya, memerlukan ruang tambahan</option>
+          <option>Tidak memerlukan ruang tambahan</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:14px"><label>2. Jika Ya, bentuk/metode test atau wawancara yang akan dilakukan</label>
+        <textarea name="interviewMethod" placeholder="Contoh: wawancara HR, user interview, tes tertulis, tes praktik, psikotes, atau lainnya."></textarea>
+      </div>
+      <div class="field" style="margin-top:14px"><label>3. Pada saat melamar, apakah pencaker mengumpulkan dokumen lamaran?</label>
+        <select name="applicationSubmission" required>
+          <option value="">-- Pilih --</option>
+          <option>Hard copy</option>
+          <option>Soft copy</option>
+          <option>Hard copy dan soft copy</option>
+          <option>Tidak mengumpulkan dokumen, cukup mengisi/menyerahkan data</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:14px"><label>4. Persyaratan lamaran yang harus dibawa/dikumpulkan pencaker</label>
+        <div class="check-grid">
+          <label><input type="checkbox" name="applicationRequirements" value="CV/Daftar Riwayat Hidup"> CV/Daftar Riwayat Hidup</label>
+          <label><input type="checkbox" name="applicationRequirements" value="Fotokopi Ijazah"> Fotokopi Ijazah</label>
+          <label><input type="checkbox" name="applicationRequirements" value="Fotokopi KTP"> Fotokopi KTP</label>
+          <label><input type="checkbox" name="applicationRequirements" value="Fotokopi KK"> Fotokopi KK</label>
+          <label><input type="checkbox" name="applicationRequirements" value="Pas Foto"> Pas Foto</label>
+          <label><input type="checkbox" name="applicationRequirements" value="Sertifikat pendukung"> Sertifikat pendukung</label>
+        </div>
+        <textarea name="applicationOtherRequirements" style="margin-top:10px" placeholder="Persyaratan tambahan lainnya (misalnya SKCK, sertifikat kompetensi, SIM, portofolio, surat pengalaman kerja, dll.)."></textarea>
+      </div>
+      <div class="field" style="margin-top:14px"><label>5. Bagaimana mekanisme seleksi pencaker?</label>
+        <select name="selectionMechanism" required>
+          <option value="">-- Pilih --</option>
+          <option>Seleksi/test/wawancara dilakukan langsung pada saat Mini Job Fair</option>
+          <option>Pencaker hanya menyerahkan lamaran, seleksi ditentukan perusahaan pada waktu selanjutnya</option>
+          <option>Gabungan: sebagian seleksi dilakukan saat Mini Job Fair dan sebagian dilanjutkan kemudian</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Keterangan tambahan terkait test, wawancara, pengumpulan lamaran, atau seleksi</label>
+        <textarea name="selectionNotes" placeholder="Jelaskan jadwal, estimasi durasi, jumlah pewawancara, kebutuhan meja/kursi, atau ketentuan lain bila diperlukan."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>F. Upload Dokumen Persyaratan</h2>
+      <div class="doc">
+        <div class="field"><label>1. Surat Perintah Tugas (SPT) dari perusahaan <span class="required">*</span></label>
+          <p class="hint">Memuat nama pegawai yang ditugaskan sebagai perwakilan perusahaan untuk menghadiri Mini Job Fair.</p>
+          <input id="spt" type="file" accept=".pdf,application/pdf" required>
+          <span class="hint">Format PDF, maksimal 5 MB.</span>
+        </div>
+      </div>
+      <div class="doc" style="margin-top:12px">
+        <div class="field"><label>2. Surat Pernyataan Kebenaran Data <span class="required">*</span></label>
+          <p class="hint">Surat berisi pernyataan bahwa data perusahaan, informasi jabatan, dan jumlah kebutuhan tenaga kerja yang disampaikan adalah benar, ditandatangani pejabat berwenang dan dibubuhi stempel perusahaan.</p>
+          <input id="statement" type="file" accept=".pdf,application/pdf" required>
+          <a class="download-template" href="https://docs.google.com/document/d/1D9Zcj8nxwqNo1rEibrI5Vjaodn3-4jxT15BygnugVW4/edit" target="_blank" rel="noopener">
+            <span class="download-icon" aria-hidden="true">↗</span> Buka Template Google Docs Surat Pernyataan
+          </a>
+          <a class="download-template" href="https://docs.google.com/document/d/1D9Zcj8nxwqNo1rEibrI5Vjaodn3-4jxT15BygnugVW4/export?format=docx" target="_blank" rel="noopener">
+            <span class="download-icon" aria-hidden="true">↓</span> Unduh Contoh Surat Pernyataan (.docx)
+          </a>
+          <span class="hint">Format PDF, maksimal 5 MB.</span>
+        </div>
+      </div>
+      <p class="hint">Kedua dokumen akan tersimpan di folder Google Drive panitia. Tautan file tercatat otomatis pada spreadsheet admin.</p>
+    </div>
+
+    <button type="submit" class="submit" id="submitBtn">KIRIM PENDAFTARAN PERUSAHAAN</button>
+    <div id="status" role="status"></div>
+    <p class="hint">Tanda (*) wajib diisi. Dengan mengirimkan formulir, perusahaan menyatakan bahwa informasi yang diberikan dapat digunakan untuk keperluan pendataan, koordinasi, dan pelaksanaan Mini Job Fair Tahun 2026.</p>
+  </form>
+</div>
+
+<script>
+const API_URL = "/.netlify/functions/api";
+function val(n){const e=document.querySelector(`[name="${n}"]`);return e?e.value.trim():"";}
+function addVacancy(){
+ const box=document.getElementById('vacancies'); const n=box.querySelectorAll('.vacancy').length+1;
+ const div=document.createElement('div');div.className='vacancy';div.innerHTML=`<div class="head"><b>Jabatan/Posisi ${n}</b><button type="button" class="secondary remove-vacancy">Hapus</button></div><div class="grid"><div class="field"><label>Nama jabatan/posisi <span class="required">*</span></label><input class="position" required></div><div class="field"><label>Kode KBJI</label><input class="kbji"></div><div class="field"><label>Jumlah kebutuhan <span class="required">*</span></label><input class="quantity" type="number" min="1" value="1" required></div></div><div class="field"><label>Kualifikasi/persyaratan</label><textarea class="requirements"></textarea></div><div class="field"><label>Keterangan</label><textarea class="notes"></textarea></div>`;
+ box.appendChild(div);div.querySelector('.remove-vacancy').onclick=()=>{if(box.querySelectorAll('.vacancy').length>1){div.remove();[...box.querySelectorAll('.vacancy')].forEach((x,i)=>x.querySelector('.head b').textContent='Jabatan/Posisi '+(i+1));}};
+}
+function readFile(file,maxMB){return new Promise((resolve,reject)=>{if(!file)return resolve(null);if(file.size>maxMB*1024*1024)return reject(new Error(`${file.name} melebihi ${maxMB} MB.`));const r=new FileReader();r.onload=()=>resolve({name:file.name,mimeType:file.type||'application/octet-stream',base64:String(r.result).split(',')[1]});r.onerror=()=>reject(new Error('Gagal membaca file '+file.name));r.readAsDataURL(file);});}
+async function api(action,payload={}){const r=await fetch(API_URL,{redirect:'follow',method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,...payload})});let d;try{d=await r.json()}catch{throw new Error('Respons server tidak valid.')};if(!r.ok||!d.ok)throw new Error(d.error||'Permintaan gagal.');return d.result;}
+async function refreshPublicStats(){try{const d=await api('stats');document.getElementById('companyCount').textContent=d.totalCompanies;document.getElementById('positionCount').textContent=d.totalPositions;document.getElementById('workerCount').textContent=d.totalWorkers;}catch{document.getElementById('companyCount').textContent='—';document.getElementById('positionCount').textContent='—';document.getElementById('workerCount').textContent='—';}}
+document.getElementById('registrationForm').addEventListener('submit',async e=>{e.preventDefault();const status=document.getElementById('status'),btn=document.getElementById('submitBtn');if(!e.currentTarget.reportValidity())return;btn.disabled=true;status.textContent='Memeriksa dokumen dan mengirim data...';try{const [logo,spt,statement]=await Promise.all([readFile(document.getElementById('logo').files[0],2),readFile(document.getElementById('spt').files[0],5),readFile(document.getElementById('statement').files[0],5)]);if(!spt||!statement)throw new Error('SPT dan Surat Pernyataan Kebenaran Data wajib diunggah.');const attendees=[...document.querySelectorAll('.attendee')].map(v=>({name:v.querySelector('.attendee-name').value.trim(),position:v.querySelector('.attendee-position').value.trim()}));const vacancies=[...document.querySelectorAll('.vacancy')].map(v=>({position:v.querySelector('.position').value.trim(),kbji:v.querySelector('.kbji').value.trim(),quantity:v.querySelector('.quantity').value,requirements:v.querySelector('.requirements').value.trim(),notes:v.querySelector('.notes').value.trim()}));const data={companyName:val('companyName'),address:val('address'),picName:val('picName'),picPosition:val('picPosition'),phone:val('phone'),email:val('email'),attendees,participation:val('participation'),sponsorship:val('sponsorship'),contribution:val('contribution'),specialNeeds:val('specialNeeds'),interviewRoomNeeded:val('interviewRoomNeeded'),interviewMethod:val('interviewMethod'),applicationSubmission:val('applicationSubmission'),applicationRequirements:[...document.querySelectorAll('input[name="applicationRequirements"]:checked')].map(x=>x.value).join(', '),applicationOtherRequirements:val('applicationOtherRequirements'),selectionMechanism:val('selectionMechanism'),selectionNotes:val('selectionNotes'),logo,spt,statement,vacancies};const result=await api('submit',data);document.getElementById('registrationId').textContent=result.registrationId;document.getElementById('registrationDate').textContent=new Date().toLocaleString('id-ID',{dateStyle:'long',timeStyle:'short'});document.getElementById('receiptCompany').textContent=data.companyName;document.getElementById('receiptPic').textContent=data.picName;document.getElementById('receiptStatus').textContent=data.participation;document.getElementById('receiptPositions').textContent=result.totalPositions+' jabatan';document.getElementById('receiptWorkers').textContent=result.totalWorkers+' orang';document.getElementById('summary').textContent=`Bukti ini menyatakan bahwa ${data.companyName} telah melakukan pendaftaran. Tercatat ${result.totalPositions} jabatan dengan total kebutuhan ${result.totalWorkers} tenaga kerja.`;document.getElementById('qrText').textContent='ID\n'+result.registrationId;document.getElementById('success').style.display='block';document.getElementById('registrationForm').reset();document.getElementById('vacancies').innerHTML='';addVacancy();status.textContent='Pendaftaran berhasil disimpan.';refreshPublicStats();window.scrollTo({top:0,behavior:'smooth'});}catch(err){status.textContent='Gagal mengirim: '+(err.message||err);}finally{btn.disabled=false;}});
+addVacancy();refreshPublicStats();
+</script></body></html>
